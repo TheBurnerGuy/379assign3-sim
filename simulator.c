@@ -1,7 +1,7 @@
 void init(int psize, int winsize){
 	int* mem = (int*)malloc((2^25)/sizeof(int));
-	int* set = (int*)malloc(winsize); //Note: Should make this a hash table
-	int* workingsetmodels; //2d array to keep track of all working sets so far?	
+	int* set = (int*)malloc(winsize); //Note: Should make this a hash table with # of buckets = winsize/4. Makes it easy to find if number is in hash table 
+	int* workingsetmodels; //need to implement 2 way linked list	
 	int counter = 0;
 	int pagesize = psize;
 	int windowsize = winsize;
@@ -34,7 +34,7 @@ void put(unsigned int address, int value){
 	}
 }
 
-void get(unsigned int address){
+int get(unsigned int address){
 	int pageNum = (i*32)/psize;
 	//check if pageNum is in current working set
 	isInSet = 0;
@@ -66,6 +66,6 @@ void done(){
 	//print all working sets - unfinished
 	int i;
 	for(i = 0; i<len(workingsetmodels); ++i){
-		print(workingsetmodels[i]);
+		print(workingsetmodels[i]);//should print linked lists so change this later
 	}
 }
