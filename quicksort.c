@@ -1,29 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-int select(int* L, int begin, int end, int k){
-    if (L<=10){
-        //sort L
-        
-        return L[k]; //return the element in the kth position
-    }
-
-    partition L into subsets S[i] of five elements each
-        (there will be n/5 subsets total).
-
-    for (i = 1 to n/5) do
-        x[i] = select(S[i],3)
-
-    M = select({x[i]}, n/10)
-
-    partition L into L1<M, L2=M, L3>M
-    if (k <= length(L1))
-        return select(L1,k)
-    else if (k > length(L1)+length(L2))
-        return select(L3,k-length(L1)-length(L2))
-    else return M
-}
-
 //haven't tested swap()
 void swap(int* A, int* B){
 	int temp = *A;
@@ -31,8 +8,17 @@ void swap(int* A, int* B){
 	*B = temp;
 }
 
-int partition(int* A, int begin, int end, int pivot){
-	
+int partition(int* A, int begin, int end){
+	pivotIndex = begin + ((end-begin)/2);
+	pivot = A[pivotIndex];
+	while(begin <= end){
+		if(A[begin] >= pivot && A[end] < pivot){
+			swap(A[begin], A[end]);
+		}
+		if(A[begin] < pivot) begin++;
+		if(A[end] >= pivot) end--;
+	}
+	return begin;
 }
 
 /*quicksort(): in-place implementation of quick sort
@@ -44,7 +30,7 @@ The index for this array is incremented/decremented by 2 when going up/down (sim
 */
 void quicksort(int* A){
 	int partitionIndex[1000]; //Note: Real simulator will have pretty much infinite storage, so remember to 'replace' the 1000.
-	int pivot, temp, i, j, indexPos = 0, begin = 0, end = len(A)-1;
+	int pivot, temp, i, indexPos = 0, begin = 0, end = len(A)-1;
 	//Initialize partitionIndex + pivot to begin loop iterations
 	partitionIndex[0] = begin;
 	partitionIndex[1] = end;
@@ -69,51 +55,19 @@ void quicksort(int* A){
 			continue;
 		}
 		//Else, find pivot and partition
-		pivot = select(A, begin, end, begin + ((end-begin)/2));
-		//For now, assume select partitions everything nicely, that is all the values that coresspond to the pivot are grouped together
-		//Find an index with pivot
-		for(i = begin; i <= end; i++){
-			if(A[i] == pivot) break;
+		pivot = partition(A, begin, end);
+		//place partitions in a stack to be sorted later; smaller one to reduce stack size
+		if(pivot-begin>=end-pivot){
+			partitionIndex[posIndex] = begin;
+			partitionIndex[posIndex+1] = i-1;
+			partitionIndex[posIndex+2] = i+1;
+			partitionIndex[posIndex+3] = end;
+		}else{
+			partitionIndex[posIndex] = i+1;
+			partitionIndex[posIndex+1] = end;
+			partitionIndex[posIndex+2] = begin;
+			partitionIndex[posIndex+3] = i-1;
 		}
-		//Swap pivot to end
-		temp = A[i];
-		A[i] = A[end];
-		A[end] = A[i];
-		//In-place Partition
-		i = begin;
-		j = end-1;
-		while(i<j){
-			while(A[i]<=pivot){
-				i++
-			}
-			while(A[j]>=pivot){
-				j--
-			}
-			if(i<j){
-				//swap
-				temp = A[i];
-				A[i] = A[j];
-				A[j] = A[i];
-				i++;
-				j--;
-			}
-		}
-		//Find index to place pivot, and assign partitions to partitionIndex
-		temp = 1; //In case this partition's piviot is mostly the same number
-		for(i = begin; i <= end; i++){
-			if(A[i]>pivot){
-				temp = A[i];
-				A[i] = A[end];
-				A[end] = A[i];
-				partitionIndex[posIndex] = begin;
-				partitionIndex[posIndex+1] = i-1;
-				partitionIndex[posIndex+2] = i+1;
-				partitionIndex[posIndex+3] = end;
-				posIndex+=2;
-				temp = 0;
-				break;
-			}
-		}
-		if(temp) posIndex -= 2;
+		posIndex+=2;
 	}
 }
