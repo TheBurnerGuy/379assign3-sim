@@ -82,27 +82,47 @@ void setCheck(int pageNum){
 
 void put(unsigned int address, int value){
 	mem[address] = value;
-	setCheck(1+((address*32)/pagesize));
+	setCheck(1+((address*8*sizeof(int))/pagesize));
 }
 
 int get(unsigned int address){
-	setCheck(1+((address*32)/pagesize));
+	setCheck(1+((address*8*sizeof(int))/pagesize));
 	return mem[address];
 }
 
 //called by process(), parameter is head node of the linked list of ws sizes
 //print to stdout: list of working set sizes quantized to interval
 //				   average of working set size
-void done(struct node* workingsetmodels) {
-    struct node* current = workingsetmodels;
-    int i = 0;
+void done() {
+    node* current = ws_head;
+    int totalPages = 0;
     int sum = 0;
     while (current!= NULL) {
-    	i++;
-    	printf("T%d: %d\n", i, current->num);
-    	sum += current ->num;
-
-    	current = current-> next;
+    	++totalPages;
+    	printf("T%d: %d\n", totalPages, current->num);
+    	sum += current->num;
+    	current = current->next;
     }
-    printf("Average Working Set Size: %d\n\n", sum/i);	
+    printf("Average Working Set Size: %d\n\n", sum/totalPages);	
 }
+
+//~ int main(){
+	//~ /* This process function generates a number of integer */
+	//~ /* keys and sorts them using bubblesort. */
+	//~ int N, i, j, k, t, min, f;
+	//~ N = 1000;
+	//~ init (128, 1000);
+	//~ /* Generate the sorting problem (just random numbers) */
+	//~ for (i = 0; i < N; i++) put (i, lrand48 ());
+	//~ /* Sort the numbers */
+	//~ for (i = 0; i < N-1; i++) {
+		//~ for (j = i+1, f = min = get (i), k = i; j < N; j++)
+			//~ if ((t = get (j)) < min) {
+				//~ k = j;
+				//~ min = t;
+			//~ }
+		//~ put (i, min);
+		//~ put (k, f);
+	//~ }
+	//~ done ();
+//~ }
