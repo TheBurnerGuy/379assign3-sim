@@ -9,12 +9,14 @@ typedef struct node_{
 
 //Adds a node to tail node, and returns new tail node
 node* addNode(node* tailNode, int number){
+	//~ printf("entered addNode land\n");
 	tailNode->next = (node*)malloc(sizeof(node));
 	if(tailNode->next == NULL){
 		perror("not enough memory to allocate more space for llist"); 
 		exit(1);
 	}
 	tailNode->next->num = number;
+	//~ printf("survived addNode land\n");
 	return tailNode->next;
 }
 
@@ -53,7 +55,7 @@ void init(int psize, int winsize){
 //setCheck - fundamental piece of put() and get()
 //Checks if page is inside of set (current working set interval) and also checks if counter has reached the window size interval
 //If counter has reached ws interval, put current set into a linked list and clear the set for new interval
-void setCheck(int pageNum){
+void setCheck(unsigned int pageNum){
 	//check if pageNum is in current working set
 	int temp = 0; //Right now, used to check if a pageNum is inside current working set
 	int i;
@@ -68,6 +70,7 @@ void setCheck(int pageNum){
 	//check if counter has reached windowsize
 	counter+=1;
 	if (counter==windowsize){
+		//~ printf("entered tail node hell\n");
 		//copy & store working set size
 		int temp = 0; //Now temp is used to store the size of of set[i]
 		counter = 0;
@@ -76,7 +79,9 @@ void setCheck(int pageNum){
 			//also clear the set
 			set[i] = 0;
 		}
-		ws_tail = addNode(ws_tail, temp);	
+		
+		ws_tail = addNode(ws_tail, temp);
+		//~ printf("survived through tail node hell\n");	
 	}
 }
 
