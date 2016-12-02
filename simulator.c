@@ -41,7 +41,7 @@ int pagesize;
 int windowsize;
 
 void init(int psize, int winsize){
-	mem = (int*)malloc((2^25)/sizeof(int));
+	mem = (int*)malloc((2^25)*sizeof(int));
 	set = (int*)calloc(winsize,sizeof(int));
 	ws_head = (node*)malloc(sizeof(node)); //Head node of Linked list for all working sets contained so far
 	ws_tail = ws_head;	
