@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-//haven't tested swap()
+//swaps two pointer values
 void swap(int* A, int* B){
 	int temp = *A;
 	*A = *B;
@@ -46,27 +46,21 @@ void quicksort(int* A, int begin, int end){
 	partitionIndex[0] = begin;
 	partitionIndex[1] = end;
 	while(indexPos >= 0){
-		//printf("%d ",indexPos);
 		//read next partition to sort
 		begin = partitionIndex[indexPos];
 		end = partitionIndex[indexPos+1];
 		pivot = partition(A, begin, end);
-		printf("Before:");
-		for(i = 0; i<11; ++i){
-			printf("%d ",A[i]);
-		}
-		printf("B: %d E: %d ",begin,end);
 		//Base case: Partition has only one number
 		if(end-begin==0){
 			indexPos -= 2;
-			printf("\n");
+			//~ printf("\n");
 			continue;
 		}
 		//Base case: Partition has two numbers
 		if(end-begin==1){
 			if(A[begin]>A[end]){
 				//Swap the two
-				printf("Swapped %d and %d\n", A[begin], A[end]);
+				//~ printf("Swapped %d and %d\n", A[begin], A[end]);
 				swap(A+begin, A+end);
 			}
 			indexPos -= 2;
@@ -74,12 +68,6 @@ void quicksort(int* A, int begin, int end){
 		}
 		//Else, find pivot and partition
 		pivot = partition(A, begin, end);
-		printf("Pivot:%d ",pivot);
-		printf("After:");
-		for(i = 0; i<11; ++i){
-			printf("%d ",A[i]);
-		}
-		printf("B: %d E: %d\n",begin,end);
 		//place partitions in a stack to be sorted later; smaller one to reduce stack size
 		if(pivot-begin>=end-pivot){
 			partitionIndex[indexPos] = begin;
@@ -97,11 +85,17 @@ void quicksort(int* A, int begin, int end){
 }
 
 int main(){
-	int numberArray[11] = {9, 3, 5, 8, 66, 7, 1, 3, 4, 16, 2};
-	quicksort(numberArray,0,10);
+	int N = 100000;
+	int numberArray[N];
 	int i;
-	for(i = 0; i<11; ++i){
-		printf("%d ",numberArray[i]);
+	for(i = 0; i < N; ++i){
+		numberArray[i] = lrand48();
 	}
-	printf("\n");
+	quicksort(numberArray,0,N-1);
+	for(i = 1; i < N; ++i){
+		if(numberArray[i-1]>numberArray[i]){
+			printf("incorrect!\n");
+			break;
+		}		
+	}
 }
