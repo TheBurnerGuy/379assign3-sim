@@ -19,4 +19,4 @@ int get(unsigned int address);
 //called by process(), parameter is head node of the linked list of ws sizes
 //print to stdout: list of working set sizes quantized to interval
 //				   average of working set size
-void done(struct node* workingsetmodels);
+void done();
