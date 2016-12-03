@@ -4,11 +4,12 @@
 //Linked list implementation
 typedef struct node_{
 	int num;
+	unsigned int key;
 	struct node_* next;
 }node;
 
 //Adds a node to tail node, and returns new tail node
-node* addNode(node* tailNode, int number){
+node* addTailNode(node* tailNode, int number){
 	//~ printf("entered addNode land\n");
 	tailNode->next = (node*)malloc(sizeof(node));
 	if(tailNode->next == NULL){
@@ -18,6 +19,35 @@ node* addNode(node* tailNode, int number){
 	tailNode->next->num = number;
 	//~ printf("survived addNode land\n");
 	return tailNode->next;
+}
+
+//Adds a node given the address
+void addNode(int number, unsigned int key){
+	node* currentNode = table[key%windowsize];
+	if(currentNode==NULL){
+		//Base case: no llist made yet
+		node* currentNode = (node*)malloc(sizeof(node));
+		currentNode->num = number;
+		currentNode->key = key;
+		return;
+	}
+	while(currentNode->next!=NULL){
+		currentNode = currentNode->next;
+	}
+	currentNode->next = (node*)malloc(sizeof(node));
+	currentNode->next->num = number;
+	currentNode->next->key = key;
+}
+
+//Searches a node for a key given the address (returns if NULL)
+//returns the stored number inside node
+int searchNodes(unsigned int key){
+	node* currentNode = table[key%windowsize];
+	while (currentNode != NULL){
+		if(currentNode->key == key) return currentNode->num;
+		currentNode = currentNode->next;
+	}
+	return NULL;
 }
 
 //Deletes all nodes
@@ -31,10 +61,21 @@ void deleteNodes(node* nodeHead){
 	}
 }
 
+//Hash table implementation
+void ht_insert(node** table, int size, node* item){
+	int key=item->key
+	table[key%size]=ll_insert(table[key%size],item);
+}
+
+node* ht_search(node** table, int size, int key){
+	return ll_search(table[key%size],key);
+}
+
 //Simulator implementation
 
 //Global variables
-int* mem;
+node** table;
+//int* mem;
 int* set;
 node* ws_head; //Head node of Linked list for all working sets contained so far
 node* ws_tail;
@@ -43,7 +84,8 @@ int pagesize;
 int windowsize;
 
 void init(int psize, int winsize){
-	mem = (int*)malloc((2^25)*sizeof(int));
+	//mem = (int*)malloc((2^25)*sizeof(int));
+	table = (node**)malloc(winsize*sizeof(node*)); //Assumes (*pagesize) buckets is enough... may change in the future
 	set = (int*)calloc(winsize,sizeof(int));
 	ws_head = (node*)malloc(sizeof(node)); //Head node of Linked list for all working sets contained so far
 	ws_tail = ws_head;	
@@ -57,7 +99,7 @@ void init(int psize, int winsize){
 //If counter has reached ws interval, put current set into a linked list and clear the set for new interval
 void setCheck(unsigned int pageNum){
 	//check if pageNum is in current working set
-	int temp = 0; //Right now, used to check if a pageNum is inside current working set
+	int temp = 0; //Right now, used to check if a pageNum is inside current working setsearchNodes
 	int i;
 	for(i = 0; i < windowsize && set[i] != 0; ++i){
 		if(set[i]==pageNum){
@@ -80,19 +122,21 @@ void setCheck(unsigned int pageNum){
 			set[i] = 0;
 		}
 		
-		ws_tail = addNode(ws_tail, temp);
+		ws_tail = addTailNode(ws_tail, temp);
 		//~ printf("survived through tail node hell\n");	
 	}
 }
 
 void put(unsigned int address, int value){
-	mem[address] = value;
+	//mem[address] = value;
+	addNode(value, address);
 	setCheck(1+((address*8*sizeof(int))/pagesize));
 }
 
 int get(unsigned int address){
 	setCheck(1+((address*8*sizeof(int))/pagesize));
-	return mem[address];
+	return searchNodes(address);
+	//return mem[address];
 }
 
 //called by process(), parameter is head node of the linked list of ws sizes
