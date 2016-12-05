@@ -5,7 +5,7 @@ void init(int psize, int winsize);
 //setCheck() is a helper function for put() and get()
 //Given a page number, checks if the page number is already in the current working set
 //If this memory reference is equal to the window size, send current working set to the linked list of all recorded working sets
-void setCheck(int pageNum);
+void setCheck(unsigned int pageNum);
 
 //put()
 //Given an address to an integer that is between 0 and 2^25-1, places the given value in that address
