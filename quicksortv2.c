@@ -10,6 +10,7 @@ void swap(int A, int B){
 }
 
 int partition(int begin, int end){
+	if(end-begin==0) return begin;
 	unsigned int pivotIndex = begin + ((end-begin)/2);
 	int pivot = get(pivotIndex);
 	swap(pivotIndex,end);
@@ -42,7 +43,7 @@ The index for this array is incremented/decremented by 2 when going up/down (sim
 */
 void quicksort(unsigned int begin, unsigned int end){
 	//int partitionIndex[1000]; //Note: Real simulator will have pretty much infinite storage, so remember to 'replace' the 1000.
-	int pivot;
+	unsigned int pivot;
 	unsigned int indexPos = end+1;
 	//Initialize partitionIndex + pivot to begin loop iterations
 	put(indexPos, begin);
@@ -93,11 +94,11 @@ int main(){
 	for(i = 0; i < N; ++i){
 		put(i,rand()%1000);
 	}
-	printf("Unsorted:");
-	for(i = 0; i < N; ++i){
-		printf("%d ",get(i));
-	}
-	printf("\n");
+	//~ printf("Unsorted:");
+	//~ for(i = 0; i < N; ++i){
+		//~ printf("%d ",get(i));
+	//~ }
+	//~ printf("\n");
 	quicksort(0,N-1);
 	done();
 	for(i = 1; i < N; ++i){
@@ -106,9 +107,9 @@ int main(){
 			break;
 		}		
 	}
-	printf("Sorted:");
-	for(i = 0; i < N; ++i){
-		printf("%d ",get(i));
-	}
-	printf("\n");
+	//~ printf("Sorted:");
+	//~ for(i = 0; i < N; ++i){
+		//~ printf("%d ",get(i));
+	//~ }
+	//~ printf("\n");
 }
