@@ -10,7 +10,6 @@ void swap(int A, int B){
 }
 
 int partition(int begin, int end){
-	if(end-begin==0) return begin;
 	unsigned int pivotIndex = begin + ((end-begin)/2);
 	int pivot = get(pivotIndex);
 	swap(pivotIndex,end);
@@ -52,7 +51,6 @@ void quicksort(unsigned int begin, unsigned int end){
 		//read next partition to sort
 		begin = get(indexPos);
 		end = get(indexPos+1);
-		pivot = partition(begin, end);
 		//Base case: Partition has only one number
 		if(end-begin==0){
 			indexPos -= 2;
