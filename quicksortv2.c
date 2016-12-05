@@ -88,14 +88,16 @@ void quicksort(unsigned int begin, unsigned int end){
 
 int main(){
 	init(128,1000);
-	int N = 100;
+	int N = 2000;
 	int i;
 	for(i = 0; i < N; ++i){
 		put(i,rand()%1000);
 	}
+	printf("Unsorted:");
 	for(i = 0; i < N; ++i){
 		printf("%d ",get(i));
 	}
+	printf("\n");
 	quicksort(0,N-1);
 	done();
 	for(i = 1; i < N; ++i){
@@ -104,4 +106,9 @@ int main(){
 			break;
 		}		
 	}
+	printf("Sorted:");
+	for(i = 0; i < N; ++i){
+		printf("%d ",get(i));
+	}
+	printf("\n");
 }
