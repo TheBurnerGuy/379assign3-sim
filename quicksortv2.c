@@ -25,12 +25,14 @@ int partition(int begin, int end){
 		if(get(end) >= pivot) --end;
 	}
 	//swap pivot back in place
+	unsigned int temp = i;
 	for(i; i<j; ++i){
 		if(get(i)>get(j)){
 			swap(i,j);
 			break;
 		}
 	}
+	if(temp==i) return temp+1;
 	return i;
 }
 
@@ -44,10 +46,11 @@ void quicksort(unsigned int begin, unsigned int end){
 	//int partitionIndex[1000]; //Note: Real simulator will have pretty much infinite storage, so remember to 'replace' the 1000.
 	unsigned int pivot;
 	unsigned int indexPos = end+1;
+	unsigned int origEnd = end;
 	//Initialize partitionIndex + pivot to begin loop iterations
 	put(indexPos, begin);
 	put(indexPos+1, end);
-	while(indexPos > end){
+	while(indexPos > origEnd){
 		//read next partition to sort
 		begin = get(indexPos);
 		end = get(indexPos+1);
@@ -87,7 +90,7 @@ void quicksort(unsigned int begin, unsigned int end){
 
 int main(){
 	init(128,1000);
-	int N = 2000;
+	int N = 2003;
 	int i;
 	for(i = 0; i < N; ++i){
 		put(i,rand()%1000);
