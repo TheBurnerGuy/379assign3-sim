@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include "simulator.h"
 
 //Linked list implementation
 typedef struct node_{
@@ -8,35 +9,65 @@ typedef struct node_{
 	struct node_* next;
 }node;
 
+//Global variables
+node** table;
+//int* mem;
+int* set;
+node* ws_head; //Head node of Linked list for all working sets contained so far
+node* ws_tail;
+int counter;
+int pagesize;
+int windowsize;
+
 //Adds a node to tail node, and returns new tail node
 node* addTailNode(node* tailNode, int number){
-	//~ printf("entered addNode land\n");
+	if (ws_tail==NULL){
+		//Base case: No tail yet
+		ws_tail = ws_head;
+		ws_tail->num = number;
+		return ws_tail;
+	}
 	tailNode->next = (node*)malloc(sizeof(node));
 	if(tailNode->next == NULL){
 		perror("not enough memory to allocate more space for llist"); 
 		exit(1);
 	}
 	tailNode->next->num = number;
-	//~ printf("survived addNode land\n");
 	return tailNode->next;
 }
 
-//Adds a node given the address
+//Adds a node given the address if theres no node already there.
+//If there are nodes (linked list) there, check if a key exists there. 
+//If yes, replace the number there. 
+//If not, make one.
 void addNode(int number, unsigned int key){
+	//printf("I'm here %d!\n", key);
 	node* currentNode = table[key%windowsize];
 	if(currentNode==NULL){
 		//Base case: no llist made yet
+		//~ printf("made llist %d",key);
 		node* currentNode = (node*)malloc(sizeof(node));
+		table[key%windowsize] = currentNode;
 		currentNode->num = number;
 		currentNode->key = key;
+		currentNode->next;
 		return;
 	}
-	while(currentNode->next!=NULL){
+	node* savedNode;
+	while(currentNode != NULL){
+		savedNode = currentNode;
+		if(currentNode->key == key){
+			//Base case: key already exists inside
+			currentNode->num = number;
+			return;
+		}
 		currentNode = currentNode->next;
 	}
-	currentNode->next = (node*)malloc(sizeof(node));
-	currentNode->next->num = number;
-	currentNode->next->key = key;
+	//~ printf("making key%d",key);
+	//Key does not exist, so make a node for that key
+	savedNode->next = (node*)malloc(sizeof(node));
+	savedNode->next->num = number;
+	savedNode->next->key = key;
 }
 
 //Searches a node for a key given the address (returns if NULL)
@@ -47,7 +78,8 @@ int searchNodes(unsigned int key){
 		if(currentNode->key == key) return currentNode->num;
 		currentNode = currentNode->next;
 	}
-	return NULL;
+	printf("no num: error\n");
+	return 0;
 }
 
 //Deletes all nodes
@@ -62,33 +94,23 @@ void deleteNodes(node* nodeHead){
 }
 
 //Hash table implementation
-void ht_insert(node** table, int size, node* item){
-	int key=item->key
-	table[key%size]=ll_insert(table[key%size],item);
-}
-
-node* ht_search(node** table, int size, int key){
-	return ll_search(table[key%size],key);
-}
+//~ void ht_insert(node** table, int size, node* item){
+	//~ int key=item->key
+	//~ table[key%size]=ll_insert(table[key%size],item);
+//~ }
+//~ 
+//~ node* ht_search(node** table, int size, int key){
+	//~ return ll_search(table[key%size],key);
+//~ }
 
 //Simulator implementation
 
-//Global variables
-node** table;
-//int* mem;
-int* set;
-node* ws_head; //Head node of Linked list for all working sets contained so far
-node* ws_tail;
-int counter;
-int pagesize;
-int windowsize;
-
 void init(int psize, int winsize){
 	//mem = (int*)malloc((2^25)*sizeof(int));
-	table = (node**)malloc(winsize*sizeof(node*)); //Assumes (*pagesize) buckets is enough... may change in the future
+	table = (node**)calloc(winsize,sizeof(node*)); //Assumes (*winsize) buckets is enough... may change in the future
 	set = (int*)calloc(winsize,sizeof(int));
 	ws_head = (node*)malloc(sizeof(node)); //Head node of Linked list for all working sets contained so far
-	ws_tail = ws_head;	
+	ws_tail = NULL;	
 	counter = 0;
 	pagesize = psize;
 	windowsize = winsize;
@@ -152,17 +174,25 @@ void done() {
     	sum += current->num;
     	current = current->next;
     }
-    printf("Average Working Set Size: %d\n\n", sum/totalPages);	
+    printf("Average Working Set Size: %d\n\n", sum/totalPages);
+    //Consider calling deleteNodes here
 }
 
 //~ int main(){
 	//~ /* This process function generates a number of integer */
 	//~ /* keys and sorts them using bubblesort. */
 	//~ int N, i, j, k, t, min, f;
-	//~ N = 1000;
+	//~ N = 1500;
 	//~ init (128, 1000);
 	//~ /* Generate the sorting problem (just random numbers) */
-	//~ for (i = 0; i < N; i++) put (i, lrand48 ());
+	//~ for (i = 0; i < N; i++) put (i, lrand48 ()%1000);
+	//~ //Print the array of numbers
+	//~ //printf("Unsorted: \n");
+	//~ //for(i = 0; i < N; i++){
+	//~ //	printf("%d ",get(i));
+	//~ //}
+	//~ //printf("\n");
+	//~ 
 	//~ /* Sort the numbers */
 	//~ for (i = 0; i < N-1; i++) {
 		//~ for (j = i+1, f = min = get (i), k = i; j < N; j++)
@@ -174,4 +204,13 @@ void done() {
 		//~ put (k, f);
 	//~ }
 	//~ done ();
+	//~ //Make sure the numbers are sorted
+	//~ //printf("Sorted array: ");
+	//~ for(i = 0; i < N; i++){
+		//~ if(i!=N-1 && get(i) > get(i+1)){
+			//~ printf("incorrect!");
+		//~ }
+		//~ //printf("%d ",get(i));
+	//~ }
+	//~ printf("\n");
 //~ }
