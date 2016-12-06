@@ -11,9 +11,9 @@ void swap(int A, int B){
 
 
 
-void heapify(int begin, int n) { //create a max heap
+void heapify(int n) { //create a max heap
     int i, child, parent;
-    for (i = 1; i <n; i++) { 
+    for (i = 1; i < n; i++) { 
         child = i;
         do {
         	parent = (child - 1) / 2;
@@ -25,14 +25,15 @@ void heapify(int begin, int n) { //create a max heap
 	}
 }
 
-void sort(int begin, int n) {
+void sort(int n) {
 	int  i, child, parent;
-    for (i = n; i >= 0; i--){
+    for (i = n-1; i > 0; i--){
     	swap(0, i); //swap max element with rightmost leaf
         parent = 0;
         child = 1;
         while (child < i) {    
-            if (get(child+1) > get(child) && child  < i + 1) child++; //if child is greater than its left sibling, move to the next child
+            if (get(child+1) > get(child) && child  < i - 1) {
+            child++;} //if child is greater than its left sibling, move to the next child
 			if (get(child) > get(parent) && child < i)  {  //if a child is bigger than its parent, switch them
 				swap(parent, child);
 			}
@@ -44,7 +45,7 @@ void sort(int begin, int n) {
 
 
 void process() {
-	int N = 15999;     //sorting is incorrect for N>=16000
+	int N = 59000;    
 	int i;
 
 	for(i = 0; i < N; ++i){
@@ -52,15 +53,18 @@ void process() {
 	}
 
 
-	heapify(0, N-1); // turn into a max heap
+	heapify(N); // turn into a max heap
 
-    sort(0,N-1);
+    sort(N);
     done();
+
+
 	for(i = 1; i < N; ++i){
+
 		if(get(i-1)>get(i)){
 			printf("incorrect!\n");
-			break;
-		}		
+			exit(1);
+		}	
 	}
 
 
