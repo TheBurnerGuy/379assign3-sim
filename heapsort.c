@@ -1,65 +1,40 @@
 #include <stdio.h>
-void heapify(int *a, int n);
-void sort(int *a, int n);
+#include <stdlib.h>
 
-int main(int argc, char* argv[]) {
-	int mem[10];	 //represents 10 words in memory for put and get 
-	int a[] = {7,9,1,4,8,3,10,6,2,1000,-5,666,5}; //array to be sorted
-	int i=0;
-	int n=13;    //count
-	
-	for (i=0; i<n; i++) {
-		printf("%d, ", a[i]);
-	}
-	printf("\n\n");
 
-	printf("{10}{9,7},{8,6,3,5},{1,6,2}\n"); //this just illustrates the leaves in the tree
-	heapify(a, n); // max heap - parents are greater than their children
-
-	for (i=0; i<n; i++) {
-		printf("%d, ", a[i]);
-	}
-	printf("\n\n");
-
-	sort(a, n);
-
-	for (i=0; i<n; i++) {
-		printf("%d, ", a[i]);
-	}
-	printf("\n\n");
+void swap(int A, int B){
+	int temp = get(A);
+	put(A, get(B));
+	put(B,temp);
 }
 
 
-void heapify(int *a, int n) {
-    int i, swap, child, parent;
-    for (i = n-1; i > 0; i--) {  //n-1 is index of end of array
+
+
+void heapify(int begin, int n) { //create a max heap
+    int i, child, parent;
+    for (i = 1; i <n; i++) { 
         child = i;
-        while (child > 0){
-            parent = child / 2;         
-             if (a[parent] < a[child])  { //if a parent node is smaller than a child, swap them
-				swap = a[parent];
-                a[parent] = a[child];
-                a[child] = swap;
-		}
-		child = parent;
-		} ;
+        do {
+        	parent = (child - 1) / 2;
+            if (get(parent) < get(child))  { //if a parent node is smaller than a child, swap them
+             	swap(parent, child);  				          
+			} 
+			child = parent;       	
+		} while (child > 0);
 	}
 }
 
-void sort(int *a, int n) {
-	int  i, swap, child, parent;
-    for (i = n - 1; i >= 0; i--){
-        swap = a[0];
-        a[0] = a[i];    //swap max element with rightmost leaf
-        a[i] = swap;
+void sort(int begin, int n) {
+	int  i, child, parent;
+    for (i = n; i >= 0; i--){
+    	swap(0, i); //swap max element with rightmost leaf
         parent = 0;
         child = 1;
         while (child < i) {    
-            if (a[child+1] > a[child] && child + 1 < i) child++; //if child is greater than its left sibling, move to the next child
-			if (a[child] > a[parent] && child < i)  {  //if a child is bigger than its parent, switch them
-                swap = a[parent];
-				a[parent] = a[child];
-				a[child] = swap;
+            if (get(child+1) > get(child) && child  < i + 1) child++; //if child is greater than its left sibling, move to the next child
+			if (get(child) > get(parent) && child < i)  {  //if a child is bigger than its parent, switch them
+				swap(parent, child);
 			}
             parent = child;
             child = 2 * parent + 1;   
@@ -67,3 +42,26 @@ void sort(int *a, int n) {
     } 
 }
 
+
+int main(int argc, char* argv[]) {
+	int N = 1000;
+	int i;
+	init(atoi(argv[1]),atoi(argv[2]));
+	for(i = 0; i < N; ++i){
+		put(i,lrand48());
+	}
+
+
+	heapify(0, N-1); // turn into a max heap
+
+    sort(0,N-1);
+    done();
+	for(i = 1; i < N; ++i){
+		if(get(i-1)>get(i)){
+			printf("incorrect!\n");
+			break;
+		}		
+	}
+
+
+}
