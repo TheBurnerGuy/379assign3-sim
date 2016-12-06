@@ -1,4 +1,4 @@
 #!/bin/bash  
 echo Arguments: pagesize windowsize process
-make $3 
+make PROCESS="$3"  
 ./$3 $1 $2
