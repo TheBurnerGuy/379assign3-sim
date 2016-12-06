@@ -5,7 +5,7 @@
 
 
 
-simulator: ${PROCESS}.c simulator.c simulator.h
+all: ${PROCESS}.c simulator.c simulator.h
 	gcc simulator.c ${PROCESS}.c -o ${PROCESS}
 
 clean:
