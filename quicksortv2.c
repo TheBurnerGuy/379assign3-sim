@@ -87,12 +87,7 @@ void quicksort(unsigned int begin, unsigned int end){
 	}
 }
 
-int main(int argc, char** argv){
-	if(argc!=3){
-		printf("%d is invalid amount of arguments!\n",argc);
-		exit(1);
-	}
-	init(atoi(argv[1]),atoi(argv[2]));
+void process() {
 	int N = 131072;
 	int i;
 	for(i = 0; i < N; ++i){

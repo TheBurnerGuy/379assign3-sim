@@ -43,10 +43,10 @@ void sort(int begin, int n) {
 }
 
 
-int main(int argc, char* argv[]) {
-	int N = 1000;
+void process() {
+	int N = 15999;     //sorting is incorrect for N>=16000
 	int i;
-	init(atoi(argv[1]),atoi(argv[2]));
+
 	for(i = 0; i < N; ++i){
 		put(i,lrand48());
 	}

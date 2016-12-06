@@ -214,3 +214,14 @@ void done() {
 	//~ }
 	//~ printf("\n");
 //~ }
+
+
+int main(int argc, char* argv[]){
+	if(argc!=3){
+		printf("%d is invalid amount of arguments!\n",argc);
+		exit(1);
+	}
+	init(atoi(argv[1]),atoi(argv[2]));
+	process();
+
+}
