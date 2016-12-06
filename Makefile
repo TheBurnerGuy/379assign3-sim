@@ -1,13 +1,15 @@
 # Makefile Usage:
-# make : compile programs
-# make client
-# make server
+# make process : compile programs
 # make clean
 
+quicksortv2:
+	gcc -c quicksortv2.c
 
 
-all:
-	gcc -o h heapsort.c
+
+#$(process): simulator.c  simulator.h 
+#	gcc simulator.c $(process).c  -o $(process)
 
 clean:
-	rm -rf *~ 
+	rm -rf *~ *.o $(process) heapsort quicksort
+
