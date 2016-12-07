@@ -11,7 +11,6 @@ typedef struct node_{
 
 //Global variables
 node** table;
-//int* mem;
 int* set;
 node* ws_head; //Head node of Linked list for all working sets contained so far
 node* ws_tail;
@@ -93,16 +92,6 @@ void deleteNodes(node* nodeHead){
 	}
 }
 
-//Hash table implementation
-//~ void ht_insert(node** table, int size, node* item){
-	//~ int key=item->key
-	//~ table[key%size]=ll_insert(table[key%size],item);
-//~ }
-//~ 
-//~ node* ht_search(node** table, int size, int key){
-	//~ return ll_search(table[key%size],key);
-//~ }
-
 //Simulator implementation
 
 void init(int psize, int winsize){
@@ -177,44 +166,6 @@ void done() {
     printf("Average Working Set Size: %d\n\n", sum/totalPages);
     //Consider calling deleteNodes here
 }
-
-//~ int main(){
-	//~ /* This process function generates a number of integer */
-	//~ /* keys and sorts them using bubblesort. */
-	//~ int N, i, j, k, t, min, f;
-	//~ N = 1500;
-	//~ init (128, 1000);
-	//~ /* Generate the sorting problem (just random numbers) */
-	//~ for (i = 0; i < N; i++) put (i, lrand48 ()%1000);
-	//~ //Print the array of numbers
-	//~ //printf("Unsorted: \n");
-	//~ //for(i = 0; i < N; i++){
-	//~ //	printf("%d ",get(i));
-	//~ //}
-	//~ //printf("\n");
-	//~ 
-	//~ /* Sort the numbers */
-	//~ for (i = 0; i < N-1; i++) {
-		//~ for (j = i+1, f = min = get (i), k = i; j < N; j++)
-			//~ if ((t = get (j)) < min) {
-				//~ k = j;
-				//~ min = t;
-			//~ }
-		//~ put (i, min);
-		//~ put (k, f);
-	//~ }
-	//~ done ();
-	//~ //Make sure the numbers are sorted
-	//~ //printf("Sorted array: ");
-	//~ for(i = 0; i < N; i++){
-		//~ if(i!=N-1 && get(i) > get(i+1)){
-			//~ printf("incorrect!");
-		//~ }
-		//~ //printf("%d ",get(i));
-	//~ }
-	//~ printf("\n");
-//~ }
-
 
 int main(int argc, char* argv[]){
 	if(argc!=3){
