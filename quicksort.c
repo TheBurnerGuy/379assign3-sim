@@ -42,7 +42,6 @@ In array, numbers are placed in this order as number ofpartitions grow:{begin1, 
 The index for this array is incremented/decremented by 2 when going up/down (simulating returning from recursion)
 */
 void quicksort(unsigned int begin, unsigned int end){
-	//int partitionIndex[1000]; //Note: Real simulator will have pretty much infinite storage, so remember to 'replace' the 1000.
 	unsigned int pivot;
 	unsigned int indexPos = end+1;
 	unsigned int origEnd = end;
@@ -100,12 +99,6 @@ void process() {
 	//~ printf("\n");
 	quicksort(0,N-1);
 	done();
-	for(i = 1; i < N; ++i){
-		if(get(i-1)>get(i)){
-			printf("incorrect!\n");
-			break;
-		}		
-	}
 	//~ printf("Sorted:");
 	//~ for(i = 0; i < N; ++i){
 		//~ printf("%d ",get(i));
