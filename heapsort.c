@@ -58,14 +58,4 @@ void process() {
     sort(N);
     done();
 
-
-	for(i = 1; i < N; ++i){
-
-		if(get(i-1)>get(i)){
-			printf("incorrect!\n");
-			exit(1);
-		}	
-	}
-
-
 }
