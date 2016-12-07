@@ -13,4 +13,4 @@ ie.
 
 ./sim 1000 1000 heapsort
 
-./sim 1000 1000 quicksortv2
+./sim 1000 1000 quicksort
